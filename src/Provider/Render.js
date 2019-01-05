@@ -5,27 +5,37 @@ import { Provider } from './context';
 
 import DialogsContainer from '../DialogsContainer';
 
-export default function DialogsProviderRender({
-    children,
-    ...othersProps
-}) {
-    const { dialogs } = othersProps;
+export default function DialogsProviderRender(props) {
+    const {
+        children,
+        dialogs,
+        layoutSelector,
+        openDialog,
+        isDialogOpened,
+        closeDialog
+    } = props;
+    const providerProps = {
+        openDialog,
+        isDialogOpened,
+        layoutSelector,
+        dialogs,
+        closeDialog
+    };
 
     return (
-        <Provider value={othersProps}>
+        <Provider value={providerProps}>
             { children }
-            <div className="js-dialogs">
+            <div className={layoutSelector}>
                 {
-                    dialogs.map(d => (
-                        d.useContainer
-                            ? (
-                                <DialogsContainer
-                                    key={d.id}
-                                    {...d}
-                                />
-                            )
-                            : null
-                    ))
+                    dialogs
+                        .filter(d => !d.standalone)
+                        .map(d => (
+                            <DialogsContainer
+                                key={d.id}
+                                usePortals={false}
+                                {...d}
+                            />
+                        ))
                 }
             </div>
         </Provider>

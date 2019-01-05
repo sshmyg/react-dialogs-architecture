@@ -2,11 +2,16 @@ import {
     compose,
     setDisplayName,
     withStateHandlers,
-    withHandlers
+    withHandlers,
+    defaultProps
 } from 'recompose';
 
 export default compose(
     setDisplayName('dialogs-provider-logic'),
+
+    defaultProps({
+        layoutSelector: 'js-dialogs'
+    }),
 
     withStateHandlers(
         {
@@ -15,17 +20,23 @@ export default compose(
         {
             toggleDialog: ({ dialogs }) => (id, state = false, options = {}) => {
                 if (!id) {
-                    throw new Error('id require');
+                    console.error('ID param require');
+                    return false;
+                }
+
+                const isAddDialog = state === true;
+                const isDialogAlreadyOpened = dialogs.some(d => d.id === id);
+
+                if (isAddDialog && isDialogAlreadyOpened) {
+                    console.error(`Dialog with id - "${id}", alredy opened`);
+                    return;
                 }
 
                 return {
-                    dialogs: state === true
+                    dialogs: isAddDialog
                         ? [
                             ...dialogs,
                             {
-                                //Use container if your dialog has no data which depends on state changes
-                                //Otherwise use container directly in your component
-                                useContainer: true,
                                 ...options,
                                 id,
                                 isOpen: true,
@@ -41,17 +52,5 @@ export default compose(
         openDialog: ({ toggleDialog }) => (id, options) => toggleDialog(id, true, options),
         closeDialog: ({ toggleDialog }) => id => toggleDialog(id, false),
         isDialogOpened: ({ dialogs }) => id => dialogs.some(d => d.id === id && d.isOpen)
-    }),
-
-    withHandlers({
-        handleOpenDialog: ({ openDialog }) => (id, options) => e => {
-            e && e.preventDefault();
-            openDialog(id, options);
-        },
-
-        handleCloseDialog: ({ closeDialog }) => id => e => {
-            e && e.preventDefault();
-            closeDialog(id);
-        }
     })
 );
