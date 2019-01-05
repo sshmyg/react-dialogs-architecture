@@ -14,16 +14,9 @@ export default function DialogsProviderRender(props) {
         isDialogOpened,
         closeDialog
     } = props;
-    const providerProps = {
-        openDialog,
-        isDialogOpened,
-        layoutSelector,
-        dialogs,
-        closeDialog
-    };
 
     return (
-        <Provider value={providerProps}>
+        <Provider value={props}>
             { children }
             <div className={layoutSelector}>
                 {
