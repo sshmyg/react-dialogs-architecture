@@ -13,8 +13,8 @@ Example works with [recompose](https://github.com/acdlite/recompose), but you ca
 4. __HOC__ - `withDialog` provide access to main logic, 'open', 'close'...
 
 ## Usage:
-- __Static dialogs__ (without dinamic content, such as changable state or something. Open once, and this dialog shouldn't change until close): Wrap your component with `withDialog` hoc and use `this.props.openDialog('dialog-id')` and `this.props.closeDialog('dialog-id')`.
-- __Dinamic dialogs__ (with changable state):
+- __Static dialogs__ (without dynamic content, such as changable state or something. Open once, and this dialog shouldn't change until close): Wrap your component with `withDialog` hoc and use `this.props.openDialog('dialog-id')` and `this.props.closeDialog('dialog-id')`.
+- __Dynamic dialogs__ (with changable state):
 1. Add __Dialogs container__ to your render: __(`standalone` and `id` - required)__. Any additional props will be thrown to __Dailog component__ and you can reach it htere. Any state or something.
 ```javascript
 <DialogsContainer
