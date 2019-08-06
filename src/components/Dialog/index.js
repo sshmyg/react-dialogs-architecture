@@ -5,19 +5,22 @@ export default function Dialog({
 }) {
     return (
         <div className="c-dialog">
-            Dialog
+            Dialog <br/>
             { text }
         </div>
     );
 }
 
 export function Dialog2({
-    text
+    text,
+    closeDialog
 }) {
     return (
         <div className="c-dialog">
-            Dialog 2
+            Dialog 2 <br/>
             { text }
+
+            <button onClick={closeDialog}>CLOSE</button>
         </div>
     );
 }
