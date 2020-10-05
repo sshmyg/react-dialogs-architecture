@@ -1,61 +1,38 @@
-import React, {
-    Fragment,
-    useState
-} from 'react';
+import React, { Fragment, useState } from 'react';
 
-import useDialog from './hooks/useDialog';
-
-import { Dialog2 } from './components/Dialog';
+import { Modal, useModal } from './components/Modal';
 
 export default function App() {
-    const [ text, setText ] = useState('Text');
-    const {
-        openDialog,
-        isDialogOpened,
-        closeDialog,
-        Container: DialogContainer
-    } = useDialog();
+  const [text, setText] = useState(Date.now());
+  const { openModal, closeModal, modalProps } = useModal();
+  const {
+    openModal: openModal2,
+    closeModal: closeModal2,
+    modalProps: modalProps2,
+  } = useModal();
 
-    return (
-        <Fragment>
-            <div>
-                <button onClick={() => openDialog('test1')}>
-                    Open dialog 1
-                </button>
-                <button
-                    disabled={!isDialogOpened('test1')}
-                    onClick={() => closeDialog('test1')}
-                >
-                    Close dialog 1
-                </button>
-                <br />
-                <button
-                    onClick={() => openDialog('test2', { standalone: true })}
-                >
-                    Open dialog 2
-                </button>
-                <button
-                    disabled={!isDialogOpened('test2')}
-                    onClick={() => closeDialog('test2')}
-                >
-                    Close dialog 2
-                </button>
-                <button
-                    disabled={!isDialogOpened('test2')}
-                    onClick={() => {
-                        setText(Math.random());
-                    }}
-                >
-                    Change data in dialog 2
-                </button>
+  return (
+    <Fragment>
+      <div>
+        <button onClick={openModal}>Open dialog 1</button>
+        <button onClick={closeModal}>Close dialog 1</button>
+        <br />
+        <button onClick={openModal2}>Open dialog 2</button>
+        <button onClick={closeModal2}>Close dialog 2</button>
+        <br />
+        <button
+          onClick={() => {
+            setText(Date.now());
+          }}
+        >
+          Change text
+        </button>
 
-                <DialogContainer
-                    standalone
-                    id="test2"
-                    text={text}
-                    component={Dialog2}
-                />
-            </div>
-        </Fragment>
-    );
+        <Modal {...modalProps}>
+          Hello world <button onClick={openModal2}>Open dialog 2</button>
+        </Modal>
+        <Modal {...modalProps2}>Hello world {text}</Modal>
+      </div>
+    </Fragment>
+  );
 }
